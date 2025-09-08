@@ -6,7 +6,7 @@ if (-not (Test-Path -Path "kd_venv" -PathType Container)) {
     if ($?) {
         Write-Host "Virtual environment created successfully."
     } else {
-        Write-Host "Failed to create virtual environment. Please ensure Python 3.12 or newer is installed and accessible."
+        Write-Host "Failed to create virtual environment. Please ensure Python and venv are installed and accessible."
         exit 1
     }
 } else {
