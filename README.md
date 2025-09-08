@@ -1,9 +1,58 @@
 # Automated-KD-Pipeline
+This project requires Python 3.12 or newer.
 
-## Installation
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install requirements.txt.
+## Virtual Environment Setup
+### If you are on Windows:
+For a fresh setup, run the `setup.ps1` script from PowerShell. This will create a Python virtual environment named `kd_venv` and install all the necessary packages from `requirements.txt`.
 
-In terminal, run 
+Before running the script, you may need to set the execution policy to allow scripts to run. You can do this by running the following command in PowerShell as an administrator:
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+```
+
+Then, run the setup script:
+```powershell
+.\setup.ps1
+```
+
+After the script finishes, activate the virtual environment in your terminal to run the Python scripts:
+
+```powershell
+.\kd_venv\Scripts\Activate.ps1
+```
+
+### If you are on Linux:
+For Linux, use the `setup.sh` script. First, make the script executable:
+```bash
+chmod +x setup.sh
+```
+
+Then, run the script:
+```bash
+./setup.sh
+```
+
+After the script finishes, activate the virtual environment in your terminal:
+```bash
+source kd_venv/bin/activate
+```
+
+## Dependencies Setup
+Next install the pytorch version that is compatible with your GPU CUDA version. You can check this by running 
+```bash
+nvidia-smi 
+```
+After that, run this pip install script to install the pytorch version that is appropriate for your cuda version.
+For more info, visit https://pytorch.org/get-started/locally/
+For example, if my GPU is running in CUDA 12.8:
+```bash
+pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+```
+If your GPU is not CUDA compatible, run
+```bash
+pip3 install torch torchvision 
+```
+After that, run 
 ```bash
 pip install -r requirements.txt
 ```
@@ -20,7 +69,7 @@ This pipeline is broadly divided into 2 parts: data preparation and uploading to
 The data prepartion phase consists of these following parts: frame extraction, preprocessing, augmentation, and labelling. 
 1. Frame extraction combines all the videos within the video folder to a single big video file, and extracts the raw frames of the combined video at a specified target fps (make sure that you specify an integer as the target fps) 
 ```bash
-python -m src.extract_frames --target_fps=3
+python -m src.video_extraction --video_path=path/to/video --target_fps=3
 ```
 2. Preprocessing stage resizes the biggest dimension of the image to 640 pixels, whilst keeping the aspect ratio intact.
 ```bash
@@ -30,9 +79,9 @@ python -m src.preprocess
 ```bash
 python -m src.augment_imgs --aug_multiplier=3 --valid_size=0.2
 ```
-4. Finally, the label generation part takes in those augmented images and runs inference on them using a specified teacher yolo_model at a specified confidence threshold, and generates the label data as well as the .yaml file in the labelled_data folder.
+4. Finally, the label generation part takes in those augmented images and runs inference on them using a specified teacher yolo_model at a specified confidence threshold, and generates the label data as well as the .yaml file in the labelled_data folder. 
 ```bash
-python -m src.label_frames --base_model=/path/to/yolo_model --conf_threshold=0.3
+python -m src.label_frames --base_model=/path/to/yolo_model --conf_threshold=0.3 --iou_threshold = 0.6
 ```
 
 ## DATA UPLOADING PHASE
