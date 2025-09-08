@@ -83,9 +83,6 @@ if __name__ == "__main__":
     aug_multiplier = args.aug_multiplier
     valid_size = args.valid_size
 
-
-    multiplier = aug_multiplier  # Number of augmented images to generate per original image
-
-    augment_images(input_folder, train_folder, valid_folder, multiplier, valid_size)
+    augment_images(input_folder, train_folder, valid_folder, aug_multiplier, valid_size)
 
     reset_folder(input_folder)
