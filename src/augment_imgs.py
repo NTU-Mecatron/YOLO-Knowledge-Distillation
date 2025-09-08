@@ -67,10 +67,10 @@ def augment_images(input_folder, train_folder, valid_folder, multiplier, valid_s
 
 if __name__ == "__main__":
 
+    origin_folder = "images/original_frames"
     input_folder = "images/preprocessed_frames"
     train_folder = "labelled_data/train/images"
     valid_folder = "labelled_data/valid/images"
-
 
     reset_folder(train_folder)
     reset_folder(valid_folder)
@@ -85,4 +85,5 @@ if __name__ == "__main__":
 
     augment_images(input_folder, train_folder, valid_folder, aug_multiplier, valid_size)
 
+    reset_folder(origin_folder)
     reset_folder(input_folder)
