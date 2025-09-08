@@ -1,7 +1,7 @@
 # Automated-KD-Pipeline
 This project requires Python 3.12 or newer.
 
-## Setup 
+## Virtual Environment Setup
 ### If you are on Windows:
 For a fresh setup, run the `setup.ps1` script from PowerShell. This will create a Python virtual environment named `kd_venv` and install all the necessary packages from `requirements.txt`.
 
@@ -36,6 +36,8 @@ After the script finishes, activate the virtual environment in your terminal:
 ```bash
 source kd_venv/bin/activate
 ```
+
+## Dependencies Setup
 Next install the pytorch version that is compatible with your GPU CUDA version. You can check this by running 
 ```bash
 nvidia-smi 
