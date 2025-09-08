@@ -42,7 +42,8 @@ Next install the pytorch version that is compatible with your GPU CUDA version. 
 ```bash
 nvidia-smi 
 ```
-After that, run this pip install script to install the pytorch version that is appropraite for your cuda version. 
+After that, run this pip install script to install the pytorch version that is appropriate for your cuda version.
+For more info, visit https://pytorch.org/get-started/locally/
 For example, if my GPU is running in CUDA 12.8:
 ```bash
 pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu128
