@@ -3,21 +3,22 @@ import os
 import argparse
 from utils.reset import reset_folder
 
-def extract_frames(video_path, output_dir, target_fps, global_frame_count):
+def extract_frames(video_path, output_dir, target_fps):
     cap = cv2.VideoCapture(video_path)
     
     if not cap.isOpened():
         print(f"Error: Could not open video {video_path}")
-        return global_frame_count
+        return
 
     video_fps = cap.get(cv2.CAP_PROP_FPS)
     if video_fps <= 0:
         print(f"Error: Could not retrieve FPS for {video_path}")
         cap.release()
-        return global_frame_count
+        return
 
     frame_interval = max(1, int(video_fps / target_fps))  # Prevent division by zero
     frame_count = 0
+    saved_count = 0
 
     os.makedirs(output_dir, exist_ok=True)
 
@@ -28,15 +29,15 @@ def extract_frames(video_path, output_dir, target_fps, global_frame_count):
                 break
             
             if frame_count % frame_interval == 0:
-                frame_path = os.path.join(output_dir, f'frame_{global_frame_count:06d}.jpg')  # Unique global numbering
+                frame_path = os.path.join(output_dir, f'frame_{saved_count:06d}.jpg')
                 cv2.imwrite(frame_path, frame)
-                global_frame_count += 1  # Increment global frame count
+                saved_count += 1
 
             frame_count += 1
     finally:
         cap.release()
 
-    return global_frame_count  # Return updated count
+    print(f"Extracted {saved_count} frames from {video_path}")
 
 
 def resize(image):
@@ -69,8 +70,6 @@ def preprocess(input_dir, output_dir):
             cv2.imwrite(output_path, pro_img)
 
 if __name__ == "__main__":
-    global_f = 0
-
     original_frame_path = "images/original_frames"
     preprocessed_frame_path = "images/preprocessed_frames"
 
@@ -85,5 +84,5 @@ if __name__ == "__main__":
     target_fps = args.target_fps
     video_path = args.video_path
 
-    global_f = extract_frames(video_path, original_frame_path, target_fps, global_f)
+    extract_frames(video_path, original_frame_path, target_fps)
     preprocess(original_frame_path, preprocessed_frame_path)
