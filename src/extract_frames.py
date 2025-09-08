@@ -38,10 +38,45 @@ def extract_frames(video_path, output_dir, target_fps, global_frame_count):
 
     return global_frame_count  # Return updated count
 
+
+def resize(image):
+    target_size = 640
+    h, w = image.shape[:2]
+    
+    # Calculate the aspect ratio
+    scale = target_size / max(h, w)
+    new_w, new_h = int(w * scale), int(h * scale)
+
+    # Resize image
+    resized = cv2.resize(image, (new_w, new_h), interpolation=cv2.INTER_AREA)
+
+    return resized
+
+def preprocess(input_dir, output_dir):
+
+    for filename in os.listdir(input_dir):
+        input_path = os.path.join(input_dir, filename)
+        output_path = os.path.join(output_dir, filename)
+
+        #ensure it's an image file
+        if filename.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp', '.tiff')):
+            cv_image = cv2.imread(input_path)
+            #error checking 
+            if cv_image is None:
+                print(f"Skipping {filename}: Unable to read image.")
+                continue
+            pro_img = resize(cv_image)
+            cv2.imwrite(output_path, pro_img)
+
 if __name__ == "__main__":
-    original_frame_path = "images/original_frames"
     global_f = 0
+
+    original_frame_path = "images/original_frames"
+    preprocessed_frame_path = "images/preprocessed_frames"
+
+    reset_folder(preprocessed_frame_path)
     reset_folder(original_frame_path)
+
     parser = argparse.ArgumentParser(description="Extract frames from all videos in 'videos' folder at target FPS.")
     parser.add_argument('--target_fps', type=int, default=3, help='Target frames per second for video extraction.')
     parser.add_argument('--video_path', type=str, required=True, help='Path to the video file.')
@@ -51,3 +86,4 @@ if __name__ == "__main__":
     video_path = args.video_path
 
     global_f = extract_frames(video_path, original_frame_path, target_fps, global_f)
+    preprocess(original_frame_path, preprocessed_frame_path)
