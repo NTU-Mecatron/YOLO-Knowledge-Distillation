@@ -74,13 +74,8 @@ To upload the data to ROBOFLOW, you must first create a project within a ROBOFLO
 python -m src.upload_to_rf --api_key=your_api_key --project_id=your_project_id --batch_name=set_a_batch_name
 ```
 
-### VERY IMPORTANT:
+### IMPORTANT: Class name change when uploading to RF
 for some reason, when I upload annotation files to RF, the spaces in the class names gets convereted to - automatically. For example, label files says "Blue pail" but at roboflow, it appears as "Blue-pail". To fix this, go to the classes and tags part of the project and correct this mistake. 
 
 ## DATA TRAINING AND TESTING PHASE
 After uploading all the data to roboflow, go through them manually to check if everything is correct. You can then run the student_training.py file in src to train the model through YOLO. Make sure to specify the folder path as well as tweak any settings that you'd like. 
-   
-Also, you may face some pathing problems when training. Ultralytics may say some bullshiet like "can't find dataset path". In that case, change the name of data directory to "dataset"
-
-
-
