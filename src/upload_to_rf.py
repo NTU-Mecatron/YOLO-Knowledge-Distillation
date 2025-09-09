@@ -1,11 +1,5 @@
-#VERY IMPORTANT: CHANGE CLASS NAME IN ROBOFLOW TO REMOVE THE - BETWEEN SPACES
-#Also, this part might take some time, so feel free to listen to your favourite music while it runs lmao
-
-import glob
-import os
 import argparse
 from roboflow import Roboflow
-from .utils.reset import reset_folder
 
 def upload_dataset(api_key, project_id, batch_name):
     # Initialize Roboflow client
@@ -13,58 +7,30 @@ def upload_dataset(api_key, project_id, batch_name):
 
     # Get the upload project from Roboflow workspace
     workspace = rf.workspace()
-    project = workspace.project(project_id)
-
-    file_extension_type = ".jpg"
-    # Annotation file path and format (e.g., .coco.json)
-
+    path_to_dataset = "generated_images/processed"
     datasets_to_upload = [
         {
+            "path": path_to_dataset,
             "split_type": "train",
-            "img_dir_name": "labelled_data/train/images",
-            "anot_dir_name": "labelled_data/train/labels",
-        },
-        {
-            "split_type": "valid",
-            "img_dir_name": "labelled_data/valid/images",
-            "anot_dir_name": "labelled_data/valid/labels",
+            "img_dir_name": path_to_dataset + "/images",
+            "anot_dir_name": path_to_dataset + "/labels",
         }
     ]
 
     for dataset in datasets_to_upload:
-        split_type = dataset["split_type"]
-        img_dir_name = dataset["img_dir_name"]
-        anot_dir_name = dataset["anot_dir_name"]
-        actual_batch_name = f"{batch_name}_{split_type}"
+        dataset_path = dataset["path"]
+        workspace.upload_dataset(
+            dataset_path=dataset_path,
+            project_name=project_id,
+            num_workers=25,
+            dataset_format="yolov8",
+            project_license="public",
+            batch_name=batch_name,
+        )
+    print(f"--- Finished uploading dataset(s) ---")
 
-        print(f"--- Uploading {split_type} dataset with batch name {actual_batch_name} ---")
 
-        # image file paths collection
-        image_glob = glob.glob(os.path.join(img_dir_name, '*' + file_extension_type))
-
-        for image_path in image_glob:
-            base_name = os.path.splitext(os.path.basename(image_path))[0]
-            txt_path = os.path.join(anot_dir_name, base_name + ".txt")
-            if os.path.isfile(txt_path):
-                print(f"Uploading {image_path} with annotation {txt_path}")
-                project.single_upload(
-                    image_path=image_path,
-                    annotation_path=txt_path,
-                    batch_name=actual_batch_name,
-                    annotation_overwrite=True,
-                    split=split_type
-                )
-            else:
-                print(f"Uploading {image_path} without annotation")
-                project.single_upload(
-                    image_path=image_path,
-                    annotation_path=None,
-                    batch_name=actual_batch_name,
-                    split=split_type
-                )
-        print(f"--- Finished uploading {split_type} dataset ---")
-
-def main():
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Upload a dataset to Roboflow.")
     parser.add_argument("--api_key", required=True, help="Your Roboflow API key.")
     parser.add_argument("--project_id", required=True, help="Your Roboflow project ID (INCLUDE THE CODE AT THE END)")
@@ -73,9 +39,3 @@ def main():
     args = parser.parse_args()
     
     upload_dataset(args.api_key, args.project_id, args.batch_name)
-    
-
-if __name__ == '__main__':
-    main()
-    reset_folder("labelled_data")
-
