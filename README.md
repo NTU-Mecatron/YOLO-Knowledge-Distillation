@@ -57,7 +57,7 @@ Also, don't forget to get rid of all the fillers in the folders!
 The data prepartion phase consists of these following parts: frame extraction, preprocessing, augmentation, and labelling. 
 1. Frame extraction extracts the frames of the specified video at a specified target fps (make sure that you specify an integer as the target fps), and resizes the biggest dimension to 640. 
 ```bash
-python -m src.video_extraction --video_path=path/to/video --target_fps=3
+python -m src.extract_frames --video_path=path/to/video --target_fps=3
 ```
 2. The augmentation part applies various augmentation to the images that are preprocessed. It also splits up the images into train and valid sets for training later and outputs them into a folder called "labelled_data" You can set two parameters when launching this file in the terminal: augmentation multiplier is the resulting multiplier of the original dataset as a result of augmentation processes, and the valid_size is the size of the valid set that you can set (0.2 means 20% valid, 80% train) 
 ```bash
@@ -65,7 +65,7 @@ python -m src.augment_imgs --aug_multiplier=3 --valid_size=0.2
 ```
 3. Finally, the label generation part takes in those augmented images and runs inference on them using a specified teacher yolo_model at a specified confidence threshold, and generates the label data as well as the .yaml file in the labelled_data folder. 
 ```bash
-python -m src.label_frames --base_model=/path/to/yolo_model --conf_threshold=0.3 --iou_threshold = 0.6
+python -m src.label_data --base_model=/path/to/yolo_model --conf_threshold=0.3 --iou_threshold = 0.6
 ```
 
 ## DATA UPLOADING PHASE
