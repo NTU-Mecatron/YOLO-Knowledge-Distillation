@@ -7,14 +7,6 @@
 > together with the rest of the perception tooling. Please use that repo for new work
 > and open issues/PRs there.
 >
-> | Here | In perception_training |
-> |---|---|
-> | `python src/extract_frames.py --source ...` | `video2frames --source ...` |
-> | `python src/label_data.py --teacher_model ...` | `auto-label --teacher-model ...` |
-> | `python src/upload_to_rf.py --api_key ...` | `roboflow-upload --project-id ... --batch-name ...` |
-> | `python src/augment_imgs.py` | `augment-images` |
-> | `python src/train.py` (edit params in code) | `pt-train --config configs/train/kd_student.yaml` |
->
 > See the *Knowledge distillation pipeline* section of the
 > [perception_training README](https://github.com/NTU-Mecatron/perception_training#knowledge-distillation-pipeline).
 Package for autolabelling images using a pre-trained YOLO model and upload the labelled data to Roboflow. This is so that we do not have to use Roboflow credit to label data:>
