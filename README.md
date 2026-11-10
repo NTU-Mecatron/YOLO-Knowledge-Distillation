@@ -1,4 +1,14 @@
-# YOLO Knowledge Distillation Pipeline
+# YOLO Knowledge Distillation Pipeline (DEPRECATED)
+
+> [!WARNING]
+> **This repository is deprecated and no longer maintained.**
+> The knowledge-distillation pipeline now lives in
+> [NTU-Mecatron/perception_training](https://github.com/NTU-Mecatron/perception_training),
+> together with the rest of the perception tooling. Please use that repo for new work
+> and open issues/PRs there.
+>
+> See the *Knowledge distillation pipeline* section of the
+> [perception_training README](https://github.com/NTU-Mecatron/perception_training#knowledge-distillation-pipeline).
 Package for autolabelling images using a pre-trained YOLO model and upload the labelled data to Roboflow. This is so that we do not have to use Roboflow credit to label data:>
 
 ## Installation
